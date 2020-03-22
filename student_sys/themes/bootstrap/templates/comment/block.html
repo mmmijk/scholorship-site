@@ -1,0 +1,42 @@
+{% extends "./base.html" %}
+{% block title %} {{ post.title }} {% endblock %}
+
+{% block main %}
+    {% if post %}
+    <h1{{ post.title }}</h1>
+    <div>
+        <span>分类:{{ post.category.name }}</span>
+        <span>作者:{{ post.owner.username}}</span>
+    </div>
+    <hr/>
+    <p>
+        {{ post.content }}
+    </p>
+    <embed src = {{ post.content }} type="application/pdf" width={w} height={h}/>
+    {% endif %}
+    <hr/>
+    <div class="comment">
+        <form class="form-group" action="/comment/" method="POST">
+            {% csrf_token %}
+            <input name="target" type="hidden" value="{{ target }}"/>
+            {{ comment_form }}
+            <input type="submit" value="写好了"/>
+        </form>
+        
+        <!-- 评论列表 -->
+        <ul class="list-group">
+            {% for comment in comment_list %}
+            <li class="list-group-item">
+                <div class="nickname">
+                    <a href="{{ comment.website }}">{{ comment.website }}</a>
+                        <span>{{ comment.created_time }}</span>
+                </div>
+                <div class="comment-content">
+                    {{ comment.content }}
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+                
+{% endblock %}
